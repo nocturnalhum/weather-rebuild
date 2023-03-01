@@ -37,7 +37,7 @@ export default function Search() {
         // );
         // const data = await res.json();
         if (query.length > 1) {
-          const data = cities.filter((city) => city.name.includes(query));
+          const data = await cities.filter((city) => city.name.includes(query));
           console.log('LOCATIONS', data);
           setQueryList(data);
         }
