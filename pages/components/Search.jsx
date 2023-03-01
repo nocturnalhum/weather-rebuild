@@ -10,13 +10,6 @@ export default function Search() {
   const [notFound, setNotFound] = useState(false);
 
   // const debounceSearch = useDebounce(query, 300);
-  const lat = 44.4761601;
-  const lon = -73.212906;
-  const result = cities.filter(
-    (item) => item.coord.lat == lat && item.coord.lon == lon
-  );
-
-  console.log('LIST TEST', result);
 
   const onChange = (e) => {
     const { value } = e.target;
@@ -36,6 +29,7 @@ export default function Search() {
       }
       // Get Geo Locations based on query search:
       if (query.length < 1) {
+        setNotFound(true);
         setQueryList([]);
       } else {
         // const res = await fetch(
@@ -72,8 +66,8 @@ export default function Search() {
         </button>
       </form>
       {query && (
-        <ul className='absolute z-20 mt-2 max-h-56  w-full divide-y divide-solid divide-gray-200/50   overflow-hidden text-xl  text-gray-200 hover:overflow-y-auto'>
-          {queryList.length > 0 ? (
+        <ul className='absolute z-20 mt-2 h-56    w-full divide-y divide-solid divide-gray-200/50   overflow-y-auto text-xl  text-gray-200'>
+          {queryList.length >= 0 && !notFound ? (
             queryList.map((city, index) => (
               <li
                 key={index}
@@ -81,7 +75,7 @@ export default function Search() {
                 className='cursor-pointer rounded-md bg-gray-600/50 py-2 px-6 backdrop-blur-md hover:bg-gray-200/20 hover:backdrop-blur-md'
               >
                 <Link
-                  href={`/location/${city.name}&${city.country}&${city.lat}&${city.lon}`}
+                  href={`/location/${city.name}&${city.id}&${city.coord.lat}&${city.coord.lon}`}
                 >
                   {city.name}, {city.state ? ` ${city.state}, ` : ''}
                   <span>{city.country}</span>
@@ -89,8 +83,10 @@ export default function Search() {
               </li>
             ))
           ) : (
-            <li className='rounded-md py-2 px-6 text-orange-400'>
-              {notFound ? 'Location not found' : ''}
+            <li
+              className={`rounded-md bg-gray-600/50 py-2 px-6 text-orange-400 backdrop-blur-md`}
+            >
+              Location not found
             </li>
           )}
         </ul>

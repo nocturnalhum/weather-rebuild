@@ -57,7 +57,7 @@ export default function City({ currentWeather, forecast }) {
 // ============================================================================
 export async function getServerSideProps(context) {
   const cityParams = context.params.city.trim().split('&');
-  const { 0: city, 1: country, 2: lat, 3: lon } = { ...cityParams };
+  const { 0: city, 1: id, 2: lat, 3: lon } = { ...cityParams };
 
   if (!lat || !lon) {
     return {
@@ -67,13 +67,13 @@ export async function getServerSideProps(context) {
 
   // Get Weather:
   const weatherRes = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
+    `https://api.openweathermap.org/data/2.5/weather?id=${id}&units=metric&appid=${API_KEY}`
   );
   const currentWeather = await weatherRes.json();
 
   // Get Forecast:
   const forecastRes = await fetch(
-    `https://api.openweathermap.org/data/2.5/forecast?q=${city},${country}&units=metric&appid=${API_KEY}`
+    `https://api.openweathermap.org/data/2.5/forecast?id=${id}&units=metric&appid=${API_KEY}`
   );
   const forecast = await forecastRes.json();
 
